@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.lorram.social.dto.PostDTO;
@@ -20,8 +20,8 @@ public class PostService {
 	@Autowired
 	private PostRepository repository;
 	
-	public Page<PostDTO> findAll(PageRequest pageRequest) {
-		Page<Post> list = repository.findAll(pageRequest);
+	public Page<PostDTO> findAll(Pageable pageable) {
+		Page<Post> list = repository.findAll(pageable);
 		return list.map(x -> new PostDTO(x));
 	}
 	

@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.lorram.social.dto.UserDTO;
@@ -20,8 +20,8 @@ public class UserService {
 	@Autowired
 	private UserRepository repository;
 	
-	public Page<UserDTO> findAll(PageRequest pageRequest) {
-		Page<User> list = repository.findAll(pageRequest);
+	public Page<UserDTO> findAll(Pageable pageable) {
+		Page<User> list = repository.findAll(pageable);
 		return list.map(x -> new UserDTO(x));
 	}
 	

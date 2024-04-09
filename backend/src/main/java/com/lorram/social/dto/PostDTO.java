@@ -9,6 +9,12 @@ import com.lorram.social.entities.Post;
 public class PostDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	private Long id;
+	
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	private String text;
 	private LocalDateTime date;
 	
@@ -41,6 +47,10 @@ public class PostDTO implements Serializable {
 		this.date = date;
 	}
 
+	public Long getId() {
+		return id;
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(date, text);
