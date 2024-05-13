@@ -54,9 +54,13 @@ public class PostService {
 	}
 	
 	public void delete(Long id) {
-		repository.deleteById(id);;
+		try {
+			repository.deleteById(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException("Integrity violation");
+		}
 	}
-	
+
 	private void fromDto(PostDTO dto, Post entity) {
 		entity.setText(dto.getText());
 		entity.setDate(dto.getDate());

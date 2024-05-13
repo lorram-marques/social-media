@@ -19,40 +19,44 @@ public class UserService {
 
 	@Autowired
 	private UserRepository repository;
-	
+
 	public Page<UserDTO> findAll(Pageable pageable) {
 		Page<User> list = repository.findAll(pageable);
 		return list.map(x -> new UserDTO(x));
 	}
-	
+
 	public UserDTO findById(Long id) {
 		Optional<User> user = repository.findById(id);
 		User entity = user.orElseThrow(() -> new ResourceNotFoundException(id));
 		return new UserDTO(entity);
 	}
-	
+
 	public UserDTO update(UserDTO dto, Long id) {
 		User entity = repository.getReferenceById(id);
 		fromDto(dto, entity);
 		entity = repository.save(entity);
 		return new UserDTO(entity);
 	}
-	
+
 	public UserDTO insert(UserDTO dto) {
 		User entity = new User();
 		try {
 			fromDto(dto, entity);
 			entity = repository.save(entity);
-			} catch(DataIntegrityViolationException e) {
-				throw new DatabaseException("Integrity violation");
-			}
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException("Integrity violation");
+		}
 		return new UserDTO(entity);
 	}
-	
+
 	public void delete(Long id) {
-		repository.deleteById(id);;
+		try {
+			repository.deleteById(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException("Integrity violation");
+		}
 	}
-	
+
 	private void fromDto(UserDTO dto, User entity) {
 		entity.setName(dto.getName());
 		entity.setEmail(dto.getEmail());

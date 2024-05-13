@@ -21,46 +21,50 @@ public class CommentService {
 
 	@Autowired
 	private CommentRepository repository;
-	
+
 	@Autowired
 	private PostRepository postRepository;
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	public Page<CommentDTO> findAll(Pageable pageable) {
 		Page<Comment> list = repository.findAll(pageable);
 		return list.map(x -> new CommentDTO(x));
 	}
-	
+
 	public CommentDTO findById(Long id) {
 		Optional<Comment> comment = repository.findById(id);
 		Comment entity = comment.orElseThrow(() -> new ResourceNotFoundException(id));
 		return new CommentDTO(entity);
 	}
-	
+
 	public CommentDTO update(CommentDTO dto, Long id) {
 		Comment entity = repository.getReferenceById(id);
 		fromDto(dto, entity);
 		entity = repository.save(entity);
 		return new CommentDTO(entity);
 	}
-	
+
 	public CommentDTO insert(CommentDTO dto) {
 		Comment entity = new Comment();
 		try {
 			fromDto(dto, entity);
 			entity = repository.save(entity);
-			} catch(DataIntegrityViolationException e) {
-				throw new DatabaseException("Integrity violation");
-			}
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException("Integrity violation");
+		}
 		return new CommentDTO(entity);
 	}
-	
+
 	public void delete(Long id) {
-		repository.deleteById(id);;
+		try {
+			repository.deleteById(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException("Integrity violation");
+		}
 	}
-	
+
 	private void fromDto(CommentDTO dto, Comment entity) {
 		entity.setText(dto.getText());
 		entity.setDate(dto.getDate());
