@@ -2,8 +2,6 @@ package com.lorram.social.entities;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
@@ -13,12 +11,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_post")
-public class Post implements Serializable {
+@Table(name = "tb_comment")
+public class Comment implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -28,18 +25,21 @@ public class Post implements Serializable {
 	private LocalDateTime date;
 	
 	@ManyToOne
-	@JoinTable(name = "tb_post_user",
-		joinColumns = @JoinColumn(name = "post_id"),
+	@JoinTable(name = "tb_comment_user",
+		joinColumns = @JoinColumn(name = "comment_id"),
 		inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private User user;
 	
-	@OneToMany(mappedBy = "post")
-	private List<Comment> comments = new ArrayList<>();
+	@ManyToOne
+	@JoinTable(name = "tb_post_comment",
+		joinColumns = @JoinColumn(name = "post_id"),
+		inverseJoinColumns = @JoinColumn(name = "comment_id"))
+	private Post post;
 	
-	public Post() {
+	public Comment() {
 	}
 	
-	public Post(String text, LocalDateTime date) {
+	public Comment(String text, LocalDateTime date) {
 		this.text = text;
 		this.date = date;
 	}
@@ -75,9 +75,13 @@ public class Post implements Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	public List<Comment> getComments() {
-		return comments;
+
+	public Post getPost() {
+		return post;
+	}
+
+	public void setPost(Post post) {
+		this.post = post;
 	}
 
 	@Override
@@ -93,7 +97,7 @@ public class Post implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Post other = (Post) obj;
+		Comment other = (Comment) obj;
 		return Objects.equals(date, other.date) && Objects.equals(text, other.text);
 	}
 }

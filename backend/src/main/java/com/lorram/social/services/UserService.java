@@ -55,5 +55,6 @@ public class UserService {
 	
 	private void fromDto(UserDTO dto, User entity) {
 		entity.setName(dto.getName());
+		entity.setEmail(dto.getEmail());
 	}
 }

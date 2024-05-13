@@ -2,38 +2,35 @@ package com.lorram.social.dto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
-import com.lorram.social.entities.Post;
+import com.lorram.social.entities.Comment;
 
-public class PostDTO implements Serializable {
+public class CommentDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private Long id;
 	private String text;
 	private LocalDateTime date;
 	private Long userId;
+	private Long postId;
 	
-	List<CommentDTO> comments = new ArrayList<>();
-	
-	public PostDTO() {
+	public CommentDTO() {
 	}
-	
-	public PostDTO(Long id, String text, LocalDateTime date, Long userId) {
-		super();
+
+	public CommentDTO(Long id, String text, LocalDateTime date, Long userId, Long postId) {
 		this.id = id;
 		this.text = text;
 		this.date = date;
 		this.userId = userId;
+		this.postId = postId;
 	}
-
-	public PostDTO(Post post) {
-		text = post.getText();
-		date = post.getDate();
-		userId = post.getUser().getId();
-		comments = post.getComments().stream().map(x -> new CommentDTO(x)).collect(Collectors.toList());
+	
+	public CommentDTO(Comment comment) {
+		id = comment.getId();
+		text = comment.getText();
+		date = comment.getDate();
+		userId = comment.getUser().getId();
+		postId = comment.getPost().getId();
 	}
 	
 	public Long getId() {
@@ -59,7 +56,7 @@ public class PostDTO implements Serializable {
 	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
-	
+
 	public Long getUserId() {
 		return userId;
 	}
@@ -68,11 +65,11 @@ public class PostDTO implements Serializable {
 		this.userId = userId;
 	}
 
-	public List<CommentDTO> getComments() {
-		return comments;
+	public Long getPostId() {
+		return postId;
 	}
 
-	public void setComments(List<CommentDTO> comments) {
-		this.comments = comments;
+	public void setPostId(Long postId) {
+		this.postId = postId;
 	}
 }
