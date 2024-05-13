@@ -2,7 +2,6 @@ package com.lorram.social.dto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 import com.lorram.social.entities.Post;
 
@@ -10,25 +9,33 @@ public class PostDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	private String text;
 	private LocalDateTime date;
+	private Long userId;
 	
 	public PostDTO() {
 	}
 	
-	public PostDTO(String text, LocalDateTime date) {
+	public PostDTO(Long id, String text, LocalDateTime date, Long userId) {
+		super();
+		this.id = id;
 		this.text = text;
 		this.date = date;
+		this.userId = userId;
 	}
-	
+
 	public PostDTO(Post post) {
 		text = post.getText();
 		date = post.getDate();
+		userId = post.getUser().getId();
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getText() {
@@ -46,25 +53,12 @@ public class PostDTO implements Serializable {
 	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
-
-	public Long getId() {
-		return id;
-	}
 	
-	@Override
-	public int hashCode() {
-		return Objects.hash(date, text);
+	public Long getUserId() {
+		return userId;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PostDTO other = (PostDTO) obj;
-		return Objects.equals(date, other.date) && Objects.equals(text, other.text);
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 }

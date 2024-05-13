@@ -5,6 +5,12 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -12,8 +18,17 @@ import jakarta.persistence.Table;
 public class Post implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	private String text;
 	private LocalDateTime date;
+	
+	@ManyToOne
+	@JoinTable(name = "tb_post_user",
+		joinColumns = @JoinColumn(name = "post_id"),
+		inverseJoinColumns = @JoinColumn(name = "user_id"))
+	private User user;
 	
 	public Post() {
 	}
@@ -37,6 +52,14 @@ public class Post implements Serializable {
 
 	public void setDate(LocalDateTime date) {
 		this.date = date;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override
