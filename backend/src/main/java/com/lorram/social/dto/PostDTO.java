@@ -30,6 +30,7 @@ public class PostDTO implements Serializable {
 	}
 
 	public PostDTO(Post post) {
+		id = post.getId();
 		text = post.getText();
 		date = post.getDate();
 		userId = post.getUser().getId();
