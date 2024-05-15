@@ -3,9 +3,12 @@ package com.lorram.social.entities;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,8 +36,11 @@ public class Post implements Serializable {
 		inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private User user;
 	
-	@OneToMany(mappedBy = "post")
+	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
 	private List<Comment> comments = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+	private Set<LikeLog> likes = new HashSet<>();
 	
 	public Post() {
 	}
@@ -78,6 +84,10 @@ public class Post implements Serializable {
 	
 	public List<Comment> getComments() {
 		return comments;
+	}
+
+	public Set<LikeLog> getLikes() {
+		return likes;
 	}
 
 	@Override

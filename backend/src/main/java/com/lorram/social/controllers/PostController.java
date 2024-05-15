@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.lorram.social.dto.LikeLogDTO;
 import com.lorram.social.dto.PostDTO;
 import com.lorram.social.services.PostService;
 
@@ -38,6 +39,12 @@ public class PostController {
 		return ResponseEntity.ok().body(dto);
 	}
 	
+	@GetMapping(value = "/{id}/likes")
+	public ResponseEntity<Page<LikeLogDTO>> findLikesById(@PathVariable Long id, Pageable pageable) {
+		Page<LikeLogDTO> dto = service.findLikesById(id, pageable);
+		return ResponseEntity.ok().body(dto);
+	}
+	
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<PostDTO> update(@RequestBody PostDTO dto, @PathVariable Long id) {
 		PostDTO newDto = service.update(dto, id);
@@ -47,6 +54,13 @@ public class PostController {
 	@PostMapping
 	public ResponseEntity<PostDTO> insert(@RequestBody PostDTO dto) {
 		PostDTO newDto = service.insert(dto);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newDto.getId()).toUri();
+		return ResponseEntity.created(uri).body(newDto);
+	}
+	
+	@PostMapping(value = "/{id}/likepost")
+	public ResponseEntity<LikeLogDTO> likePost(@RequestBody LikeLogDTO dto, @PathVariable Long id) {
+		LikeLogDTO newDto = service.likePost(dto, id);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newDto.getId()).toUri();
 		return ResponseEntity.created(uri).body(newDto);
 	}

@@ -2,9 +2,12 @@ package com.lorram.social.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,11 +26,14 @@ public class User implements Serializable {
 	private String name;
 	private String email;
 	
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
 	List<Post> posts = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
 	List<Comment> comments = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+	Set<LikeLog> likes = new HashSet<>();
 	
 	public User() {
 	}
@@ -73,6 +79,10 @@ public class User implements Serializable {
 	
 	public List<Comment> getComments() {
 		return comments;
+	}
+	
+	public Set<LikeLog> getLikes() {
+		return likes;
 	}
 
 	@Override

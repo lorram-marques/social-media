@@ -15,9 +15,10 @@ public class PostDTO implements Serializable {
 	private String text;
 	private LocalDateTime date;
 	private Long userId;
+	private Integer likeCount;
 	
 	List<CommentDTO> comments = new ArrayList<>();
-	
+
 	public PostDTO() {
 	}
 	
@@ -34,6 +35,7 @@ public class PostDTO implements Serializable {
 		text = post.getText();
 		date = post.getDate();
 		userId = post.getUser().getId();
+		likeCount = post.getLikes().size();
 		comments = post.getComments().stream().map(x -> new CommentDTO(x)).collect(Collectors.toList());
 	}
 	
@@ -67,6 +69,14 @@ public class PostDTO implements Serializable {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+	
+	public Integer getLikeCount() {
+		return likeCount;
+	}
+
+	public void setLikeCount(Integer likeCount) {
+		this.likeCount = likeCount;
 	}
 
 	public List<CommentDTO> getComments() {
