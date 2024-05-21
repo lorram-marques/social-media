@@ -74,6 +74,10 @@ public class PostService {
 		LikeLog entity = new LikeLog();
 		try {
 			fromLikeDto(dto, entity, id);
+			Long user = likeLogRepository.findByUserId(dto.getUserId(), id);
+			if (user == dto.getUserId()) {
+				throw new DatabaseException("Can't like twice");
+			}
 			entity = likeLogRepository.save(entity);
 			} catch(DataIntegrityViolationException e) {
 				throw new DatabaseException("Integrity violation");
