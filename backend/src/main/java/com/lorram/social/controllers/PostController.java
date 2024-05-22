@@ -65,6 +65,12 @@ public class PostController {
 		return ResponseEntity.created(uri).body(newDto);
 	}
 	
+	@PostMapping(value = "/{id}/unlikepost")
+	public ResponseEntity<Void> unlikePost(@RequestBody LikeLogDTO dto, @PathVariable Long id) {
+		service.unlikePost(dto, id);
+		return ResponseEntity.noContent().build();
+	}
+	
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		service.delete(id);

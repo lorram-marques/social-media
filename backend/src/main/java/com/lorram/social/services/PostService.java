@@ -85,6 +85,20 @@ public class PostService {
 		return new LikeLogDTO(entity);
 	}
 	
+	public void unlikePost(LikeLogDTO dto, Long id) {
+		try {
+			Long user = likeLogRepository.findByUserId(dto.getUserId(), id);
+			if (user != dto.getUserId()) {
+				throw new DatabaseException("No like to remove");
+			}
+			Long likeLogId = likeLogRepository.findLikeId(dto.getUserId(), id);
+			likeLogRepository.deleteById(likeLogId);
+			} catch(DataIntegrityViolationException e) {
+				throw new DatabaseException("Integrity violation");
+			}
+	}
+	
+	
 	public void delete(Long id) {
 		try {
 			repository.deleteById(id);
@@ -103,5 +117,4 @@ public class PostService {
 		entity.setPost(repository.getReferenceById(id));
 		entity.setUser(userRepository.getReferenceById(dto.getUserId()));
 	}
-
 }
